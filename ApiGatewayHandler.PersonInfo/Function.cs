@@ -53,6 +53,7 @@ public class Function
 		ILambdaContext context)
 	{
 		string errorMessage = "Invalid request";
+		int statusCode = 400;
 		if (request.PathParameters.TryGetValue("id", out string? idString) && Guid.TryParse(idString, out Guid id))
 		{
 			try
@@ -62,12 +63,13 @@ public class Function
 				{
 					context.Logger.LogInformation("Data found:");
 					context.Logger.LogInformation(JsonSerializer.Serialize(personInfo));
-
-					return StatusResponse<PersonInfoModel>(personInfo, 200);
+					statusCode = 200;
+					return StatusResponse<PersonInfoModel>(personInfo, statusCode);
 				}
 				else
 				{
 					errorMessage = $"Person info with id: {id} not found";
+					statusCode = 404;
 				}
 			}
 			catch (Exception ex)
@@ -78,7 +80,7 @@ public class Function
 		}
 
 		context.Logger.LogError(errorMessage);
-		return StatusResponse<string>(errorMessage, 400);
+		return StatusResponse<string>(errorMessage, statusCode);
 	}
 
 	public async Task<APIGatewayHttpApiV2ProxyResponse> PostPerson(
@@ -86,6 +88,7 @@ public class Function
 		ILambdaContext context)
 	{
 		string errorMessage = "Invalid request";
+		int statusCode = 400;
 		if (!string.IsNullOrEmpty(request.Body))
 		{
 			try
@@ -96,7 +99,8 @@ public class Function
 					await _dynamoDBContext.SaveAsync<PersonInfoModel>(personInfo);
 					context.Logger.LogInformation("Data saved to db.");
 					context.Logger.LogInformation(JsonSerializer.Serialize<PersonInfoModel>(personInfo));
-					return StatusResponse<PersonInfoModel>(personInfo, 200);
+					statusCode = 200;
+					return StatusResponse<PersonInfoModel>(personInfo, statusCode);
 				}
 			}
 			catch (Exception ex)
@@ -107,7 +111,7 @@ public class Function
 			errorMessage = "Failed to deserialize the request body";
 		}
 		context.Logger.LogError(errorMessage);
-		return StatusResponse<string>(errorMessage, 400);
+		return StatusResponse<string>(errorMessage, statusCode);
 
 	}
 	#endregion
