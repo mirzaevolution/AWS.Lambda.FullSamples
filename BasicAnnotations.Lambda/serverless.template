@@ -1,0 +1,73 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Transform": "AWS::Serverless-2016-10-31",
+  "Description": "An AWS Serverless Application. This template is partially managed by Amazon.Lambda.Annotations (v1.2.0.0).",
+  "Resources": {
+    "BasicAnnotationsLambdaFunctionsGetPersonInfoGenerated": {
+      "Type": "AWS::Serverless::Function",
+      "Metadata": {
+        "Tool": "Amazon.Lambda.Annotations",
+        "SyncedEvents": [
+          "RootGet"
+        ]
+      },
+      "Properties": {
+        "Runtime": "dotnet8",
+        "CodeUri": ".",
+        "MemorySize": 256,
+        "Timeout": 30,
+        "Policies": [
+          "arn:aws:iam::975049942687:policy/LambdaAndRWDynamoDB"
+        ],
+        "PackageType": "Zip",
+        "Handler": "BasicAnnotations.Lambda::BasicAnnotations.Lambda.Functions_GetPersonInfo_Generated::GetPersonInfo",
+        "Events": {
+          "RootGet": {
+            "Type": "HttpApi",
+            "Properties": {
+              "Path": "/people-info/{id}",
+              "Method": "GET"
+            }
+          }
+        }
+      }
+    },
+    "BasicAnnotationsLambdaFunctionsPostPersonInfoGenerated": {
+      "Type": "AWS::Serverless::Function",
+      "Metadata": {
+        "Tool": "Amazon.Lambda.Annotations",
+        "SyncedEvents": [
+          "RootPost"
+        ]
+      },
+      "Properties": {
+        "Runtime": "dotnet8",
+        "CodeUri": ".",
+        "MemorySize": 256,
+        "Timeout": 30,
+        "Policies": [
+          "arn:aws:iam::975049942687:policy/LambdaAndRWDynamoDB"
+        ],
+        "PackageType": "Zip",
+        "Handler": "BasicAnnotations.Lambda::BasicAnnotations.Lambda.Functions_PostPersonInfo_Generated::PostPersonInfo",
+        "Events": {
+          "RootPost": {
+            "Type": "HttpApi",
+            "Properties": {
+              "Path": "/people-info",
+              "Method": "POST"
+            }
+          }
+        }
+      }
+    }
+  },
+  "Outputs": {
+    "ApiURL": {
+      "Description": "API endpoint URL for Prod environment",
+      "Value": {
+        "Fn::Sub": "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com/"
+      }
+    }
+  }
+}
