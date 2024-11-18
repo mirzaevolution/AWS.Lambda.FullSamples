@@ -54,7 +54,8 @@ public class Function
 	{
 		string errorMessage = "Invalid request";
 		int statusCode = 400;
-		if (request.PathParameters.TryGetValue("id", out string? idString) && Guid.TryParse(idString, out Guid id))
+		if (request.PathParameters.TryGetValue("id", out string? idString) &&
+			Guid.TryParse(idString, out Guid id))
 		{
 			try
 			{
@@ -106,9 +107,10 @@ public class Function
 			catch (Exception ex)
 			{
 				context.Logger.LogError(ex.ToString());
+				errorMessage = ex.Message;
+				statusCode = 500;
 
 			}
-			errorMessage = "Failed to deserialize the request body";
 		}
 		context.Logger.LogError(errorMessage);
 		return StatusResponse<string>(errorMessage, statusCode);

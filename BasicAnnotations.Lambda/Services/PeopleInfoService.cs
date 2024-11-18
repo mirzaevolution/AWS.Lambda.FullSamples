@@ -22,5 +22,10 @@ namespace BasicAnnotations.Lambda.Services
 			await _dynamoDbContext.SaveAsync<PersonInfoModel>(personInfo);
 			return personInfo;
 		}
+
+		public async Task DeletePersonInfo(Guid id)
+		{
+			await _dynamoDbContext.DeleteAsync<PersonInfoModel>(id);
+		}
 	}
 }

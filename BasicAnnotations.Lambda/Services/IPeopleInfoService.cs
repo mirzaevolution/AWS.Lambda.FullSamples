@@ -4,5 +4,6 @@
 	{
 		Task<PersonInfoModel> GetPersonInfo(Guid id);
 		Task<PersonInfoModel> PostPersonInfo(PersonInfoModel personInfo);
+		Task DeletePersonInfo(Guid id);
 	}
 }

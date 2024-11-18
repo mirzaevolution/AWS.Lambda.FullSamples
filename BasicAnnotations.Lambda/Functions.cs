@@ -12,13 +12,8 @@ namespace BasicAnnotations.Lambda;
 /// <summary>
 /// A collection of sample Lambda functions that provide a REST api for doing simple math calculations. 
 /// </summary>
-public class Functions
+public class Functions(IPeopleInfoService _peopleInfoService)
 {
-	private readonly IPeopleInfoService _peopleInfoService;
-	public Functions(IPeopleInfoService peopleInfoService)
-	{
-		_peopleInfoService = peopleInfoService;
-	}
 
 	[LambdaFunction]
 	[HttpApi(LambdaHttpMethod.Get, "/people-info/{id}")]
@@ -65,6 +60,23 @@ public class Functions
 			Country = request.Country,
 		});
 		return HttpResults.Ok(new DataResponse<PersonInfoModel?>(response));
+	}
+
+	[LambdaFunction]
+	[HttpApi(LambdaHttpMethod.Delete, "/people-info/{id}")]
+	public async Task<IHttpResult> DeletePersonInfo(string id, ILambdaContext context)
+	{
+		if (string.IsNullOrEmpty(id) || !Guid.TryParse(id, out var personInfoId))
+		{
+			return HttpResults.BadRequest(new
+			{
+				error = "Invalid id"
+			});
+		}
+		context.Logger.LogInformation($"Deleting person info with id: {personInfoId}");
+		await _peopleInfoService.DeletePersonInfo(personInfoId);
+		return HttpResults.Accepted();
+
 	}
 
 }

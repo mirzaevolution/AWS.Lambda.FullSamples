@@ -60,6 +60,35 @@
           }
         }
       }
+    },
+    "BasicAnnotationsLambdaFunctionsDeletePersonInfoGenerated": {
+      "Type": "AWS::Serverless::Function",
+      "Metadata": {
+        "Tool": "Amazon.Lambda.Annotations",
+        "SyncedEvents": [
+          "RootDelete"
+        ]
+      },
+      "Properties": {
+        "Runtime": "dotnet8",
+        "CodeUri": ".",
+        "MemorySize": 256,
+        "Timeout": 30,
+        "Policies": [
+          "arn:aws:iam::975049942687:policy/LambdaAndRWDynamoDB"
+        ],
+        "PackageType": "Zip",
+        "Handler": "BasicAnnotations.Lambda::BasicAnnotations.Lambda.Functions_DeletePersonInfo_Generated::DeletePersonInfo",
+        "Events": {
+          "RootDelete": {
+            "Type": "HttpApi",
+            "Properties": {
+              "Path": "/people-info/{id}",
+              "Method": "DELETE"
+            }
+          }
+        }
+      }
     }
   },
   "Outputs": {
