@@ -187,4 +187,47 @@ public class Functions(ICustomerService _customerService)
 			});
 		}
 	}
+
+	[LambdaFunction]
+	[HttpApi(LambdaHttpMethod.Delete, "/v1/customers/{country}/{email}")]
+	public async Task<IHttpResult> Delete(string country, string email, ILambdaContext context)
+	{
+		context.Logger.LogInformation($"[{nameof(Delete)}] - Country: {country}, Email: {email}");
+		if (string.IsNullOrEmpty(country))
+		{
+			return HttpResults.BadRequest(new
+			{
+				isError = true,
+				errors = new[] { "Invalid country" }
+			});
+		}
+		if (string.IsNullOrEmpty(email))
+		{
+			return HttpResults.BadRequest(new
+			{
+				isError = true,
+				errors = new[] { "Invalid email" }
+			});
+		}
+		try
+		{
+			await _customerService.Delete(country, email);
+			return HttpResults.Ok(new
+			{
+				isError = false,
+				errors = Enumerable.Empty<string>()
+			});
+		}
+		catch (Exception ex)
+		{
+			context.Logger.LogError($"[{nameof(Delete)}] - Error");
+			context.Logger.LogError($"[{nameof(Delete)}] - {ex.Message}");
+			return HttpResults.InternalServerError(new
+			{
+				isError = true,
+				error = new[] { ex.Message }
+			});
+		}
+	}
+
 }

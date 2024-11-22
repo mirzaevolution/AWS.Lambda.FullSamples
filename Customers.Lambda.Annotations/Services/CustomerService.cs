@@ -1,22 +1,31 @@
 ﻿using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DataModel;
+using Amazon.SQS;
+using Amazon.SQS.Model;
 using AutoMapper;
 using Customers.Lambda.Annotations.Models;
+using Microsoft.Extensions.Configuration;
+using System.Text.Json;
 
 namespace Customers.Lambda.Annotations.Services
 {
 	public class CustomerService : ICustomerService
 	{
 		private readonly IDynamoDBContext _dynamoDBContext;
+		private readonly IAmazonSQS _amazonSQS;
 		private readonly IMapper _mapper;
-
+		private readonly IConfiguration _configuration;
 		public CustomerService(
 				IAmazonDynamoDB amazonDynamoDBClient,
-				IMapper mapper
+				IAmazonSQS amazonSQS,
+				IMapper mapper,
+				IConfiguration configuration
 			)
 		{
 			_dynamoDBContext = new DynamoDBContext(amazonDynamoDBClient);
+			_amazonSQS = amazonSQS;
 			_mapper = mapper;
+			_configuration = configuration;
 		}
 
 		public async Task<IEnumerable<CustomerDto>> GetByCountry(string country)
@@ -61,6 +70,11 @@ namespace Customers.Lambda.Annotations.Services
 			{
 				ConditionalOperator = Amazon.DynamoDBv2.DocumentModel.ConditionalOperatorValues.And
 			});
+			await SendQueueMessage(JsonSerializer.Serialize(new
+			{
+				action = "Create or Update",
+				data = customer
+			}));
 			return _mapper.Map<CustomerDto>(customer);
 		}
 
@@ -75,6 +89,23 @@ namespace Customers.Lambda.Annotations.Services
 				throw new ArgumentNullException(nameof(email));
 			}
 			await _dynamoDBContext.DeleteAsync<Customer>(country, email);
+			await SendQueueMessage(JsonSerializer.Serialize(new
+			{
+				action = "Delete",
+				data = $"Country:{country}, Email: {email}"
+			}));
+		}
+
+
+		private async Task SendQueueMessage(string body)
+		{
+			await _amazonSQS.SendMessageAsync(new SendMessageRequest
+			{
+				QueueUrl = _configuration["SQS:CustomerLambdaEventsUrl"],
+				MessageBody = body
+			});
+
+
 		}
 	}
 }

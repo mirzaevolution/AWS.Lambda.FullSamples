@@ -33,6 +33,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Annotations", "Annotations"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Customers.Lambda.Annotations", "Customers.Lambda.Annotations\Customers.Lambda.Annotations.csproj", "{67AC6F97-A4DD-46E5-9AE7-E7887DB09723}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Customers.Lambda.Events", "Customers.Lambda.AddEventNotifier\Customers.Lambda.Events.csproj", "{A1D0DBCC-177B-4598-B38C-E46FF2BEC281}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -79,6 +81,10 @@ Global
 		{67AC6F97-A4DD-46E5-9AE7-E7887DB09723}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{67AC6F97-A4DD-46E5-9AE7-E7887DB09723}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{67AC6F97-A4DD-46E5-9AE7-E7887DB09723}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1D0DBCC-177B-4598-B38C-E46FF2BEC281}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1D0DBCC-177B-4598-B38C-E46FF2BEC281}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1D0DBCC-177B-4598-B38C-E46FF2BEC281}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1D0DBCC-177B-4598-B38C-E46FF2BEC281}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -95,6 +101,7 @@ Global
 		{C0BCAFC5-EB7A-437C-872D-21AD35ADACEE} = {C5AD1A40-3F7E-4BAE-929C-CD59CBA4F5BD}
 		{2FC588E5-8CB1-4E9F-9A63-9F5417479779} = {C5AD1A40-3F7E-4BAE-929C-CD59CBA4F5BD}
 		{67AC6F97-A4DD-46E5-9AE7-E7887DB09723} = {2FC588E5-8CB1-4E9F-9A63-9F5417479779}
+		{A1D0DBCC-177B-4598-B38C-E46FF2BEC281} = {2FC588E5-8CB1-4E9F-9A63-9F5417479779}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6022D9C6-C028-4FA5-B559-B121394123DC}

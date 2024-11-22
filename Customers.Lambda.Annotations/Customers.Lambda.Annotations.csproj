@@ -12,6 +12,14 @@
     <PublishReadyToRun>true</PublishReadyToRun>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="appsettings.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Amazon.Lambda.Core" Version="2.4.0" />
     <PackageReference Include="Amazon.Lambda.APIGatewayEvents" Version="2.7.1" />
     <PackageReference Include="Amazon.Lambda.Serialization.SystemTextJson" Version="2.4.4" />
@@ -19,6 +27,8 @@
     <PackageReference Include="AutoMapper" Version="13.0.1" />
 	  <PackageReference Include="AWSSDK.DynamoDBv2" Version="3.7.403.3" />
 	  <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="3.7.300" />
+	  <PackageReference Include="AWSSDK.SimpleNotificationService" Version="3.7.400.56" />
+	  <PackageReference Include="AWSSDK.SQS" Version="3.7.400.55" />
 
   </ItemGroup>
   <!-- 
